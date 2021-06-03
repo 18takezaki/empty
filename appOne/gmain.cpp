@@ -1,29 +1,5 @@
-#define _HEIHOU
+#define _MINO
 #ifdef _HEIHOU
-#include"libone.h"
-void gmain() {
-	window(1000, 1000);
-	let a, b, c;
-	while (notQuit) {
-		a = mathMouseX;
-		b = mathMouseY;
-		c = sqrt(a * a + b * b);
-
-		clear(140);
-		mathAxis(7.1);
-
-		stroke(60, 120, 240);
-		strokeWeight(4);
-		mathLine(0, 0, a, b);
-		mathLine(0, 0, a, 0);
-		mathLine(a, 0, a, b);
-
-		textSize(50);
-		text("底辺=" + a, 0, 60);
-		text("高さ=" + b, 0, 120);
-		text("斜辺=" + c, 0, 180);
-	}
-}
 #endif
 #ifdef _MENSEKI
 #include"libone.h"
@@ -335,6 +311,8 @@ void gmain() {
 }
 #endif
 #ifdef _FACE
+#include"libOne.h"
+
 #endif
 #ifdef _MOVE
 #include"libOne.h"
@@ -368,5 +346,383 @@ void gmain(){
 		line(1920 / 2, 0, px, py);
 	}
 
+}
+#endif
+#ifdef _MINO
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>			//memsetを使えるようにする
+#include<time.h>
+#include<conio.h>
+
+constexpr auto FIELD_WIDTH = 12;
+constexpr auto FIELD_HEIGHT = 22;					//盤面の設定
+
+char field[FIELD_HEIGHT][FIELD_WIDTH];				//フィールドを１か０で設定
+char displayBuffer[FIELD_HEIGHT][FIELD_WIDTH];
+
+enum {
+	MINO_TYPE_I,
+	MINO_TYPE_O,
+	MINO_TYPE_S,
+	MINO_TYPE_Z,
+	MINO_TYPE_J,
+	MINO_TYPE_L,
+	MINO_TYPE_T,
+	MINO_TYPE_MAX
+};													//ブロックの宣言
+
+enum {
+	MINO_ANGLE_0,
+	MINO_ANGLE_90,
+	MINO_ANGLE_180,
+	MINO_ANGLE_270,
+	MINO_ANGLE_MAX
+};
+
+constexpr auto MINO_WIDTH = 4;
+constexpr auto MINO_HEIGHT = 4;
+char  minoShapes[MINO_TYPE_MAX][MINO_ANGLE_MAX][MINO_HEIGHT][MINO_WIDTH] = {
+	//MINO_TYPE_I
+	{
+		// MINO_ANGLE_0
+		{
+			0, 1, 0, 0,
+			0, 1, 0, 0,
+			0, 1, 0, 0,
+			0, 1, 0, 0,
+		},
+		// MINO_ANGLE_90 
+		{
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			1, 1, 1, 1,
+			0, 0, 0, 0,
+		},
+		// MINO_ANGLE_180
+		{
+			0, 0, 1, 0,
+			0, 0, 1, 0,
+			0, 0, 1, 0,
+			0, 0, 1, 0,
+		},
+		// MINO_ANGLE_270
+		{
+			0, 0, 1, 0,
+			0, 0, 1, 0,
+			0, 0, 1, 0,
+			0, 0, 1, 0,
+		},
+		},
+		//MINO_TYPE_O
+		{
+			// MINO_ANGLE_0
+			{
+				0,0,0,0,
+				0,1,1,0,
+				0,1,1,0,
+				0,0,0,0,
+			},
+			// MINO_ANGLE_90
+			{
+				0,0,0,0,
+				0,1,1,0,
+				0,1,1,0,
+				0,0,0,0,
+			},
+			// MINO_ANGLE_180
+			{
+				0,0,0,0,
+				0,1,1,0,
+				0,1,1,0,
+				0,0,0,0,
+				},
+				// MINO_ANGLE_270
+				{
+					0,0,0,0,
+					0,1,1,0,
+					0,1,1,0,
+					0,0,0,0,
+				},
+				},
+				//MINO_TYPE_S
+				{
+					// MINO_ANGLE_0
+					{
+						0,0,0,0,
+						0,1,1,0,
+						1,1,0,0,
+						0,0,0,0,
+					},
+					// MINO_ANGLE_90
+					{
+						0,1,0,0,
+						0,1,1,0,
+						0,0,1,0,
+						0,0,0,0,
+					},
+					// MINO_ANGLE_180
+					{
+						0,0,0,0,
+						0,1,1,0,
+						1,1,0,0,
+						0,0,0,0,
+					},
+					// MINO_ANGLE_270
+					{
+						0,0,0,0,
+						0,1,0,0,
+						0,1,1,0,
+						0,0,1,0,
+					},
+					},
+					//MINO_TYPE_Z
+					{
+						// MINO_ANGLE_0
+						{
+							0,0,0,0,
+							1,1,0,0,
+							0,1,1,0,
+							0,0,0,0,
+						},
+						// MINO_ANGLE_90
+						{
+							0,0,0,0,
+							0,0,1,0,
+							0,1,1,0,
+							0,1,0,0,
+						},
+						// MINO_ANGLE_180
+						{
+							0,0,0,0,
+							0,1,1,0,
+							0,0,1,1,
+							0,0,0,0,
+						},
+						// MINO_ANGLE_270
+						{
+							0,0,1,0,
+							0,1,1,0,
+							0,1,0,0,
+							0,0,0,0,
+						},
+						},
+						//MINO_TYPE_J
+						{
+							// MINO_ANGLE_0
+							{
+								0,0,1,0,
+								0,0,1,0,
+								0,1,1,0,
+								0,0,0,0,
+							},
+							// MINO_ANGLE_90
+							{
+								0,0,0,0,
+								1,1,1,0,
+								0,0,1,0,
+								0,0,0,0,
+							},
+							// MINO_ANGLE_180
+							{
+								0,0,0,0,
+								0,1,1,0,
+								0,1,0,0,
+								0,1,0,0,
+								},
+								// MINO_ANGLE_270
+								{
+									0,0,0,0,
+									0,1,0,0,
+									0,1,1,1,
+									0,0,0,0,
+								},
+								},
+								//MINO_TYPE_L
+								{
+									// MINO_ANGLE_0
+								{
+									0,1,0,0,
+									0,1,0,0,
+									0,1,1,0,
+									0,0,0,0,
+								},
+								// MINO_ANGLE_90
+								{
+									0,0,0,0,
+									0,0,1,0,
+									1,1,1,0,
+									0,0,0,0,
+								},
+								// MINO_ANGLE_180
+								{
+									0,0,0,0,
+									0,1,1,0,
+									0,0,1,0,
+									0,0,1,0,
+								},
+								// MINO_ANGLE_270
+							{
+								0,0,0,0,
+								0,1,1,1,
+								0,1,0,0,
+								0,0,0,0,
+							},
+							},
+							//MINO_TYPE_T
+							{
+								// MINO_ANGLE_0
+								{
+									0,0,0,0,
+									1,1,1,0,
+									0,1,0,0,
+									0,0,0,0,
+								},
+								// MINO_ANGLE_90
+								{
+									0,0,0,0,
+									0,1,0,0,
+									0,1,1,0,
+									0,1,0,0,
+								},
+								// MINO_ANGLE_180
+								{
+									0,0,0,0,
+									0,0,1,0,
+									0,1,1,1,
+									0,0,0,0,
+								},
+								// MINO_ANGLE_270
+								{
+									0,0,1,0,
+									0,1,1,0,
+									0,0,1,0,
+									0,0,0,0,
+								},
+								},
+};
+
+int minoType = 0, minoAngle = 0;
+int minoX = 5, minoY = 0;
+
+void display() {
+	memcpy(displayBuffer, field, sizeof(field));
+
+	for (int i = 0; i < MINO_HEIGHT; i++)
+		for (int j = 0; j < MINO_WIDTH; j++)
+			displayBuffer[minoY + i][minoX + j] |=
+			minoShapes[minoType][minoAngle][i][j];
+
+	system("cls");
+	for (int i = 0; i < FIELD_HEIGHT; i++) {
+		for (int j = 0; j < FIELD_WIDTH; j++)
+			printf(displayBuffer[i][j] ? "■" : "　");
+		printf("\n");
+	}
+}
+
+bool isHit(int _minoX, int _minoY, int _minoType, int _minoAngle) {
+	for (int i = 0; i < MINO_HEIGHT; i++)
+		for (int j = 0; j < MINO_WIDTH; j++)
+			if (minoShapes[_minoType][_minoAngle][i][j]
+				&& field[_minoY + i][_minoX + j])
+				return true;
+	return false;
+}
+
+void resetMino() {
+	minoX = 5;
+	minoY = 0;
+	minoType = rand() % MINO_TYPE_MAX;
+	minoAngle = rand() % MINO_ANGLE_MAX;
+}
+void main() {
+	memset(field, 0, sizeof(field));				//メモリーの初期化：フィールドを０で初期化
+	for (int i = 0; i < FIELD_HEIGHT; i++)			//
+		field[i][0] = field[i][FIELD_WIDTH - 1] = 1;  //
+	for (int i = 0; i < FIELD_WIDTH; i++)
+		field[FIELD_HEIGHT - 1][i] = 1;
+
+	resetMino();
+
+	time_t t = time(NULL);
+	while (1) {
+		if (_kbhit()) {
+			switch (_getch()) {
+				//case 'w':
+			case 's':
+				if (!isHit(
+					minoX,	// int _minoX
+					minoY + 1,		// int _minoY
+					minoType,	// int _minoType
+					minoAngle))	// int _minoAngle
+					minoY++;
+				break;
+			case 'a':
+				if (!isHit(
+					minoX - 1,	// int _minoX
+					minoY,		// int _minoY
+					minoType,	// int _minoType
+					minoAngle))	// int _minoAngle
+					minoX--;
+				break;
+			case 'd':
+				if (!isHit(
+					minoX + 1,	// int _minoX
+					minoY,		// int _minoY
+					minoType,	// int _minoType
+					minoAngle))	// int _minoAngle
+					minoX++;
+				break;
+			case 0x20:
+				if (!isHit(
+					minoX,								// int _minoX
+					minoY,								// int _minoY
+					minoType,							// int _minoType
+					(minoAngle + 1) % MINO_ANGLE_MAX))	// int _minoAngle
+					minoAngle = (minoAngle + 1) % MINO_ANGLE_MAX;
+				break;
+			}
+			display();
+		}
+		if (t != time(NULL)) {
+			t = time(NULL);
+
+			if (isHit(
+				minoX,			// int _minoX
+				minoY + 1,		// int _minoY
+				minoType,		// int _minoType
+				minoAngle)) {	// int _minoAngle
+
+				for (int i = 0; i < MINO_HEIGHT; i++)
+					for (int j = 0; j < MINO_WIDTH; j++)
+						field[minoY + i][minoX + j] |= minoShapes[minoType][minoAngle][i][j];
+				{
+					for (int i = 0; i < FIELD_HEIGHT - 1; i++) {
+						bool lineFill = true;
+						for (int j = 1; j < FIELD_WIDTH - 1; j++) {
+							if (!field[i][j])
+								lineFill = false;
+						}
+
+						if (lineFill)
+							//for (int j = 1; j < FIELD_WIDTH - 1; j++)
+							//	field[i][j] = 0;
+
+							for (int j = i; 0 < j; j--)
+								memcpy(field[j], field[j - 1], FIELD_WIDTH);
+					}
+				}
+				resetMino();
+			}
+			else
+				minoY++;
+
+			display();
+
+		}
+	}
+
+	int _getch();
 }
 #endif
