@@ -1,4 +1,71 @@
-#define _MINO
+#define _YUKI
+#ifdef _YUKI
+#include"libOne.h"
+void yukiX(float px,float py) {
+	strokeWeight(0); stroke(0);
+	fill(255,255,0);
+	rect(px - 72, py - 372, 150, 20);
+	rect(px - 32, py - 480, 70, 120);
+	strokeWeight(5); stroke(0);
+	fill(255,255 ,255);
+	circle(px, py - 250, 200);
+	circle(px, py, 300);
+	fill(0); stroke(0);
+	circle(px + 40, py - 280, 30);
+	circle(px - 40, py - 280, 30);
+	strokeWeight(15); stroke(0);
+	line(px, py - 200, 920, 320);
+	line(px, py - 200, 1000, 320);
+	stroke(239,159,0);
+	line(px - 120, py - 90, 750, 340);
+	line(px + 120, py - 90, 1200, 340);
+	stroke(0);
+	circle(px, py - 90, 15);
+	circle(px, py - 20, 15);
+}
+void yukiY(float px, float py) {
+	float hue = 190;
+	float satu = 255;
+	float value = 255;
+	strokeWeight(0); stroke(0);
+	fill(hue, satu, 0);
+	rect(px - 72, py - 372, 150, 20);
+	rect(px - 32, py - 480, 70, 120);
+	strokeWeight(5); stroke(0);
+	fill(hue, satu, 0);
+	circle(px, py - 250, 200);
+	circle(px, py, 300);
+	fill(0); stroke(0);
+	circle(px + 40, py - 280, 30);
+	circle(px - 40, py - 280, 30);
+	strokeWeight(15); stroke(0);
+	line(px, py - 200, 920, 320);
+	line(px, py - 200, 1000, 320);
+	stroke(239, 159, 0);
+	line(px - 120, py - 90, 750, 340);
+	line(px + 120, py - 90, 1200, 340);
+	stroke(0);
+	circle(px, py - 90, 15);
+	circle(px, py - 20, 15);
+}
+void gmain() {
+	window(1920, 1080);
+	float px = width / 2;
+	float py = height / 2;
+	int sw = 1;
+	while (notQuit) {
+		if (isTrigger(KEY_SPACE)) { sw = 1 - sw; }
+		clear(60,120,240);
+		if (sw == 1) {
+			yukiX(px, py);
+		}
+		else {
+			yukiY(px, py);
+
+		}
+	}
+}
+#endif
 #ifdef _HEIHOU
 #endif
 #ifdef _MENSEKI
