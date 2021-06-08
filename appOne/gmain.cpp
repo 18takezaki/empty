@@ -1,13 +1,96 @@
-#define _MINO
+#define _FACE
+
+#ifdef _OSERO
+#include<stdio.h>
+#include<stdlib.h>
+#include<conio.h>
+
+#define BOARD_WIDTH 8
+#define BOARD_HEIGHT 8
+
+enum {
+	COLOR_NONE=-1,
+	COLOR_BLACK=0,
+	COLOR_WHITE=1,
+	COLOR_MAX
+};
+
+int cells[BOARD_HEIGHT][BOARD_WIDTH];
+
+int cursorX, cursorY;
+int turn;
+
+int main() {
+	for (int y = 0; y < BOARD_HEIGHT; y++) {
+		for (int x = 0; x < BOARD_WIDTH; x++)
+			cells[y][x] = COLOR_NONE;
+	}
+	while (1) {
+		system("cls");
+		for (int y = 0; y < BOARD_HEIGHT; y++) {
+			for (int x = 0; x < BOARD_WIDTH; x++)
+				if ((x == cursorX) && (y == cursorY))
+					printf("");
+				else {
+					switch (cells[y][x]) {
+					case COLOR_NONE: printf("E"); break;
+					case COLOR_BLACK:printf("Z"); break;
+					case COLOR_WHITE:printf("œ"); break;
+					}
+				}
+			printf("\n");
+		}
+		switch (_getch()) {
+		case'w': cursorY--; break;
+		case's': cursorY++; break;
+		case'a': cursorX--; break;
+		case'd': cursorX++; break;
+		default:
+			break;
+		}
+	}
+}
+#endif
+#ifdef _sircle
+#include"libOne.h"
+void gmain() {
+	window(1000, 1000);
+	clear(200);
+
+	strokeWeight(20);
+	stroke(0, 255, 0);
+	fill(255, 0, 0);
+
+	float px = 500, py = 500, radius = 200;
+	circle(px, py, radius * 2);
+
+	pause();
+}
+#endif
+#ifdef _ZUKEI
+#include"libone.h"
+void gmain() {
+	window(800, 450, full);
+	for (int j = 0; j < 9; j++) {
+		for (int i = 0; i < 16; i++) {
+			if ((j + i) % 2 == 0)fill(0);
+			else fill(0, 100, 0);
+			rect(50 * i, 50 * j, 50, 50);
+		}
+	}
+	pause();
+}
+#endif
+
 #ifdef _YUKI
 #include"libOne.h"
-void yukiX(float px,float py) {
+void yukiX(float px, float py) {
 	strokeWeight(0); stroke(0);
-	fill(255,255,0);
+	fill(255, 255, 0);
 	rect(px - 72, py - 372, 150, 20);
 	rect(px - 32, py - 480, 70, 120);
 	strokeWeight(5); stroke(0);
-	fill(255,255 ,255);
+	fill(255, 255, 255);
 	circle(px, py - 250, 200);
 	circle(px, py, 300);
 	fill(0); stroke(0);
@@ -16,7 +99,7 @@ void yukiX(float px,float py) {
 	strokeWeight(15); stroke(0);
 	line(px, py - 200, 920, 320);
 	line(px, py - 200, 1000, 320);
-	stroke(239,159,0);
+	stroke(239, 159, 0);
 	line(px - 120, py - 90, 750, 340);
 	line(px + 120, py - 90, 1200, 340);
 	stroke(0);
@@ -55,7 +138,7 @@ void gmain() {
 	int sw = 1;
 	while (notQuit) {
 		if (isTrigger(KEY_SPACE)) { sw = 1 - sw; }
-		clear(60,120,240);
+		clear(60, 120, 240);
 		if (sw == 1) {
 			yukiX(px, py);
 		}
@@ -68,6 +151,7 @@ void gmain() {
 #endif
 #ifdef _HEIHOU
 #endif
+
 #ifdef _MENSEKI
 #include"libone.h"
 void gmain() {
@@ -270,9 +354,9 @@ void gmain() {
 		for (int i = 0; i < numVertices; i++) {
 			float px = cos(angle * i) * 200;
 			float py = -sin(angle * i) * 200;
-			fill(angle*i, satu, value);
+			fill(angle * i, satu, value);
 			noStroke();
-			circle(1500+px, 540+py, 50);
+			circle(1500 + px, 540 + py, 50);
 		}
 	}
 }
@@ -379,6 +463,42 @@ void gmain() {
 #endif
 #ifdef _FACE
 #include"libOne.h"
+void roundFace(float px, float py) {
+	fill(255, 255, 0);
+	circle(px, py, 300);
+	fill(255);
+	circle(px + 50, py, 80);
+	circle(px - 50, py, 80);
+	fill(0);
+	circle(px + 50, py, 30);
+	circle(px - 50, py, 30);
+	fill(255, 200, 200);
+	circle(px, py + 80, 80);
+}
+void squareFace(float px, float py) {
+	rectMode(CENTER);
+	fill(255, 255, 0);
+	rect(px, py, 300,300);
+	fill(255);
+	rect(px + 50, py, 80,80);
+	rect(px - 50, py, 80,80);
+	fill(0);
+	rect(px + 50, py, 30,30);
+	rect(px - 50, py, 30,30);
+	fill(255, 200, 200);
+	rect(px, py + 80, 80,80);
+}
+void gmain() {
+	window(1920, 1080, full);
+	float px = width / 2;
+	float py = height / 2;
+	float angle = 0;
+	while (notQuit) {
+		clear(60, 120, 240);
+		roundFace;
+		squareFace;
+	}
+}
 
 #endif
 #ifdef _MOVE
