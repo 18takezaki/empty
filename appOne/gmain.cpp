@@ -1,4 +1,4 @@
-#define _FACE
+#define _OSERO
 
 
 #ifdef _OSERO
@@ -15,17 +15,52 @@ enum {
 	COLOR_WHITE=1,
 	COLOR_MAX
 };
+enum {
+	DIRECTION_UP,
+	DIRECTION_UP_LEFT,
+	DIRECTION_LEFT,
+	DIRECTION_DOWN_LEFT,
+	DIRECTION_DOWN,
+	DIRECTION_DOWN_RIGTH,
+	DIRECTION_RIGHT,
+	DIRECTION_UP_RIGHT,
+	DIRECTION_MAX
+};
+int directions[][2] = {
+	{},// DIRECTION_UP
+	{},// DIRECTION_UP_LEFT
+	{},// DIRECTION_LEFT
+	{},// DIRECTION_DOWN_LEFT
+	{},// DIRECTION_DOWN
+	{},// DIRECTION_DOWN_RIGTH
+	{},// DIRECTION_RIGHT
+	{},// DIRECTION_UP_RIGHT
+};
+char colorNames[][5 + 1] = {
+	"Black",
+	"White"
+};
 
 int cells[BOARD_HEIGHT][BOARD_WIDTH];
 
 int cursorX, cursorY;
 int turn;
 
+bool checkCanPut(int color, int _x, int _y) {
+	if(cells[_y][_x]!=COLOR_NONE)
+		return false;
+
+	return true;
+
+}
 int main() {
 	for (int y = 0; y < BOARD_HEIGHT; y++) {
 		for (int x = 0; x < BOARD_WIDTH; x++)
 			cells[y][x] = COLOR_NONE;
 	}
+	cells[3][3] = cells[4][4] = COLOR_WHITE;
+	cells[4][3] = cells[3][4] = COLOR_BLACK;
+	bool cantPut = false;
 	while (1) {
 		system("cls");
 		for (int y = 0; y < BOARD_HEIGHT; y++) {
@@ -41,12 +76,25 @@ int main() {
 				}
 			printf("\n");
 		}
+		if (cantPut)
+			printf("Can't put!\n");
+		else 
+			printf("%s turn \n", colorNames[turn]);
+
+		cantPut = false;
 		switch (_getch()) {
 		case'w': cursorY--; break;
 		case's': cursorY++; break;
 		case'a': cursorX--; break;
 		case'd': cursorX++; break;
 		default:
+			if (!checkCanPut(turn, cursorX, cursorY)) {
+				cantPut = true;
+				break;
+			}
+
+			cells[cursorY][cursorX] = turn;
+			turn ^= 1;	//‚P‚¾‚Á‚½‚ç‚OA‚O‚¾‚Á‚½‚ç‚P‚É•ÏŠ·
 			break;
 		}
 	}
