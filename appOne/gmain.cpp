@@ -1,5 +1,6 @@
 #define _FACE
 
+
 #ifdef _OSERO
 #include<stdio.h>
 #include<stdlib.h>
@@ -475,28 +476,43 @@ void roundFace(float px, float py) {
 	fill(255, 200, 200);
 	circle(px, py + 80, 80);
 }
-void squareFace(float px, float py) {
+void squareFace(float px, float py,float angle) {
 	rectMode(CENTER);
 	fill(255, 255, 0);
-	rect(px, py, 300,300);
+	rect(px, py, 300,300,angle);
 	fill(255);
-	rect(px + 50, py, 80,80);
-	rect(px - 50, py, 80,80);
+	rect(px + 50, py, 80,80,angle);
+	rect(px - 50, py, 80,80,angle);
 	fill(0);
-	rect(px + 50, py, 30,30);
-	rect(px - 50, py, 30,30);
+	rect(px + 50, py, 30,30,angle);
+	rect(px - 50, py, 30,30,angle);
 	fill(255, 200, 200);
-	rect(px, py + 80, 80,80);
+	rect(px, py + 80, 80,80,angle);
 }
 void gmain() {
 	window(1920, 1080, full);
 	float px = width / 2;
 	float py = height / 2;
 	float angle = 0;
+	int sw = 1;
+	float ofsX = 100;
+	float ofsY = 100;
 	while (notQuit) {
+		ofsX = width / 2 - mouseX;
+		ofsY = height / 2 - mouseY;
+		if (isTrigger(KEY_SPACE)) { sw = 1 - sw; }
+		angle += 0.01f;
+		strokeWeight(10);
 		clear(60, 120, 240);
-		roundFace;
-		squareFace;
+		for (int i = -5; i <= 5; i++) {
+			if (sw == 1) {
+				roundFace(px + ofsX * i, py + ofsY * i);
+			}
+			else {
+				squareFace(px + ofsX * i, py + ofsY * i, angle);
+			}
+
+		}
 	}
 }
 
