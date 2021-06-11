@@ -1,4 +1,48 @@
-#define _HEIHOU
+#define _HANTEI
+#ifdef _HANTEI
+#include"libOne.h"
+void gmain () {
+	window(1000, 1000);
+	struct CIRCLE {
+		float x, y, z;
+	};
+	struct CIRCLE c1, c2;
+	c1.x = width / 2;
+	c1.y = height / 2 + 100;
+	c1.z = 50;
+	c2.x = 0;
+	c2.y = 0;
+	c2.z =100;
+
+	while (notQuit) {
+		c2.x = MouseX;
+		c2.y = MouseY;
+
+		float a = c2.x - c1.x;
+		float b = c2.y - c1.y;
+		float distance = sqrt(a * a + b * b);
+
+		if (distance <= c1.z + c2.z) {
+			fill(255, 0, 0,128);
+		}
+		else {
+			fill(255);
+		}
+
+		clear(160);
+		circle(c1.x, c1.y, c1.z * 2);
+		circle(c2.x, c2.y, c2.z * 2);
+		line(c1.x, c1.y, c2.x, c2.y);
+		line(c1.x, c1.y, c2.x, c1.y);
+		line(c2.x, c2.y, c2.x, c1.y);
+
+		textSize(50);
+		text(distance, 0, 60);
+	}
+}
+
+
+#endif 
 
 
 #ifdef _OSERO
