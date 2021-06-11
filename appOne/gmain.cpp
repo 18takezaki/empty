@@ -1,4 +1,36 @@
-#define _HANTEI
+#define _éOäpä÷êî
+
+#ifdef _éOäpä÷êî
+#include"libOne.h"
+void gmain() {
+	window(1000, 1000);
+	let x, y, z, deg = 0;
+	angleMode(DEGREES);
+	while (notQuit) {
+		if (isPress(KEY_W)) deg += 1;
+		if (isPress(KEY_S)) deg -= 1;
+		x = cos(deg);
+		y = sin(deg);
+		z = sqrt(x * x + y * y);
+		clear(128);
+		mathAxis(1.2);
+		strokeWeight(10);
+		stroke(160, 200, 255);
+		mathLine(0, 0, x, y);
+		stroke(255, 255, 200);
+		mathLine(0, 0, x, 0);
+		stroke(255, 200, 200);
+		mathLine(x,y,x,0);
+
+		textSize(50);
+		text(x, 0, 60);
+		text(y, 0, 120);
+		text(z, 0, 180);
+	}
+}
+
+#endif
+
 #ifdef _HANTEI
 #include"libOne.h"
 void gmain () {
@@ -43,7 +75,6 @@ void gmain () {
 
 
 #endif 
-
 
 #ifdef _OSERO
 #include<stdio.h>
