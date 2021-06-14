@@ -1,4 +1,7 @@
-#define _OŠpŠÖ”
+#define _ACTION
+
+#ifdef _ACTION
+#endif
 
 #ifdef _OŠpŠÖ”
 #include"libOne.h"
