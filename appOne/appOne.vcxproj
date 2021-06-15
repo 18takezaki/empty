@@ -153,12 +153,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="gmain.cpp" />
+    <ClCompile Include="obstacle.cpp" />
+    <ClCompile Include="player.cpp" />
+    <ClCompile Include="rect_area.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="float2.h" />
+    <ClInclude Include="obstacle.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="rect_area.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

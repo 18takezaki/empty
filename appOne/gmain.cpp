@@ -1,6 +1,47 @@
 #define _ACTION
 
 #ifdef _ACTION
+#include"libOne.h"
+#include"obstacle.h"
+#include"player.h"
+#include"rect_area.h"
+int collision(struct PLAYER* p, struct OBSTACLE* o) {
+	float pLeft = p->p.x + p->r.dx;
+	float pRight = pLeft + p->r.w;
+	float pTop = p->p.y + p->r.dy;
+	float pBottom = pTop + p->r.h;
+	float oLeft = o->p.x + o->r.dx;
+	float oRight = oLeft + o->r.w;
+	float oTop = o->p.y + o->r.dy;
+	float oBottom = oTop + o->r.h;
+	if (pRight < oLeft || oRight < pLeft ||
+		pBottom < oTop || oBottom < pTop) {
+		return 0;
+	}
+	return 1;
+}
+void gmain() {
+	window(1920, 1080, full);
+	struct OBSTACLE obstacle;
+	struct OBSTACLE* o = &obstacle;
+	struct PLAYER player;
+	load(&obstacle);
+	load(&player);
+	init(&obstacle);
+	init(&player);
+	while (notQuit) {
+		move(&obstacle);
+		move(&player);
+		if (collision(&player, &obstacle))
+			clear(250, 0, 0);
+		else
+			clear(70, 0, 70);
+		draw(&obstacle);
+		draw(&player);
+		drawRectArea(&obstacle.p, &obstacle.r);
+		drawRectArea(&player.p, &player.r);
+	}
+}
 #endif
 
 #ifdef _ŽOŠpŠÖ”
