@@ -1,4 +1,4 @@
-#define _HOSHI
+#define _JIKAN
 
 #ifdef _HOSHI
 #include "libOne.h"
@@ -110,7 +110,47 @@ void gmain() {
 }
 #endif
 
-#ifdef _JIKAN 
+#ifdef _JIKAN
+#include"libOne.h"
+#include<time.h>
+void gmain() {
+	window(1000, 1000);
+	float x, y, deg = 0;
+	float second = 0, minute = 0, hour = 0;
+	angleMode(DEGREES);
+	time_t stdTime;
+	struct tm local;
+	while (notQuit) {
+		time(&stdTime);
+		localtime_s(&local, &stdTime);
+		second = local.tm_sec;
+		minute = local.tm_min;
+		hour = local.tm_hour;
+
+		//second += 20;
+		//if (second >= 60) { minute++; second = 0; }
+		//if (minute >= 60) { hour++; minute = 0; }
+		clear(200);
+
+		deg = 30 * hour + 30 * minute / 60;
+		x = sin(deg) * 300;
+		y = -cos(deg) * 300;
+		strokeWeight(20);
+		line(500, 500, 500 + x, 500 + y);  
+
+		deg = 6 * minute + 6 * second / 60;
+		x = sin(deg) * 400;
+		y = -cos(deg) * 400;
+		strokeWeight(10);
+		line(500, 500, 500 + x, 500 + y);
+
+		deg = 6 * second;
+		x = sin(deg) * 400;
+		y = -cos(deg) * 400;
+		strokeWeight(5);
+		line(500, 500, 500 + x, 500 + y);
+	}
+}
 #endif
 
 #ifdef _ACTION
