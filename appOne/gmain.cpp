@@ -1,4 +1,39 @@
-#define _JIKAN
+#define _STAR
+
+#ifdef _STAR
+#include"libOne.h"
+void gmain() {
+	window(1920, 1080, full);
+	struct POS {
+		float x, y, z;
+	};
+	const int num = 1000;
+	struct POS p[num];
+	for (int i = 0; i < num; i++) {
+		p[i].x = random(-1.0f, 1.0f);
+		p[i].y = random(-0.5f, 0.5);
+		p[i].z = random(0.0f, 1.0f);
+	}
+	while (notQuit) {
+		for (int i = 0; i < num; i++) {
+			p[i].z -= 0.005f;
+			if (p[i].z <= 0.0f) {
+				p[i].z = 1.0f;
+			}
+		}
+		fill(0, 0, 0, 60);
+		strokeWeight(0);
+		rect(0, 0, width, height);
+		mathAxis(1.0f);
+		stroke(200,255,255);
+		for (int i = 0; i < num; i++) {
+			float size = (1.0f - p[i].z) * 20.0f;
+			strokeWeight(size);
+			mathPoint(p[i].x/p[i].z, p[i].y / p[i].z);
+		}
+	}
+}
+#endif
 
 #ifdef _HOSHI
 #include "libOne.h"
@@ -37,19 +72,36 @@ int createStar() {
 	}
 	return createShape(vertices, NUM);
 }
+int createHeart() {
+	const int NUM = 80;
+	struct SHAPE_VERTEX vertices[NUM];
+	float deg = 360.0f / NUM;
+	angleMode(DEGREES);
+	for (int i = 0; i < NUM; i++) {
+		float t = deg * i;
+		vertices[i].x = 
+			pow(sin(t),3);
+		vertices[i].y = -(
+			13 * cos(t) -
+			5 * cos(2 * t) -
+			2 * cos(3 * t) -
+			1 * cos(4 * t))/16;
+	}
+	return createShape(vertices, NUM);
+}
 void gmain() {
 	window(1000, 1000);
-	int idx = createStar();
+	int idx = createHeart();
+	//int idx = createStar();
 	//int idx = ();
-	//int idx = createPolygon();
 	float deg = 0;
 	angleMode(DEGREES);
 	while (notQuit) {
 		deg += 1;
 		clear(200);
 		strokeWeight(5);
-		fill(255, 255, 0);
-		shape(idx, 100, 500, deg, 100);
+		fill(255, 200, 200);
+		shape(idx, 500, 500, deg, 200);
 	}
 }
 #endif
